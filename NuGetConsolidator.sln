@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuGetConsolidator.Cli", "NuGetConsolidator.Cli\NuGetConsolidator.Cli.csproj", "{1382E7C2-9249-438A-8075-B51279535EC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuGetConsolidator.Core", "NuGetConsolidator.Core\NuGetConsolidator.Core.csproj", "{7912C8FB-ABAE-4D4C-BF34-5354C3AA8740}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuGetConsolidator.Tests", "NuGetConsolidator.Tests\NuGetConsolidator.Tests.csproj", "{D299180B-52D3-44C6-8034-CB68DA615685}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E089D86C-51B0-4CB6-97BF-59F2BD1C7232}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetConsolidator.Example", "NuGetConsolidator.Example\NuGetConsolidator.Example.csproj", "{591B66FF-110D-4B67-9762-A08A4CEFBE1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1382E7C2-9249-438A-8075-B51279535EC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1382E7C2-9249-438A-8075-B51279535EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1382E7C2-9249-438A-8075-B51279535EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1382E7C2-9249-438A-8075-B51279535EC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7912C8FB-ABAE-4D4C-BF34-5354C3AA8740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7912C8FB-ABAE-4D4C-BF34-5354C3AA8740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7912C8FB-ABAE-4D4C-BF34-5354C3AA8740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7912C8FB-ABAE-4D4C-BF34-5354C3AA8740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D299180B-52D3-44C6-8034-CB68DA615685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D299180B-52D3-44C6-8034-CB68DA615685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D299180B-52D3-44C6-8034-CB68DA615685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D299180B-52D3-44C6-8034-CB68DA615685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{591B66FF-110D-4B67-9762-A08A4CEFBE1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{591B66FF-110D-4B67-9762-A08A4CEFBE1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{591B66FF-110D-4B67-9762-A08A4CEFBE1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{591B66FF-110D-4B67-9762-A08A4CEFBE1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B6BE518-19DB-439A-852F-B5A398499C51}
+	EndGlobalSection
+EndGlobal
