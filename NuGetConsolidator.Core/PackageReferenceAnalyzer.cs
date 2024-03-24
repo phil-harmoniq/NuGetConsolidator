@@ -20,7 +20,6 @@ public class PackageReferenceAnalyzer
 
     public IReadOnlyList<LockFileTargetLibrary> GetRedundantPackages()
     {
-        var dependencyTreeRoots = new List<PackageReference>();
         var topLevelPackageList = TopLevelPackages.Values;
         var redundantTopLevelPackages = new List<LockFileTargetLibrary>();
 

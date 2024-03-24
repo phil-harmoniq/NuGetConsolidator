@@ -9,9 +9,13 @@ public class LockFileGenerator
     {
         var directoryName = Path.GetDirectoryName(projectPath);
         var arguments = new[] { "restore", $"\"{projectPath}\"" };
-        var commandResult = Utilities.RunDotNetCommand(directoryName, arguments);
-        var outputLockFile = Path.Combine(outputPath, "project.assets.json");
-        var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NullLogger.Instance);
-        return lockFile;
+
+        using (var commandRunner = new DotNetCommandRunner(directoryName, arguments))
+        {
+            var commandResult = commandRunner.Execute();
+            var outputLockFile = Path.Combine(outputPath, "project.assets.json");
+            var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NullLogger.Instance);
+            return lockFile;
+        }
     }
 }
