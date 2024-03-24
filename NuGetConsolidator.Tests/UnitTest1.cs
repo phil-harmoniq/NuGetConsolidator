@@ -7,7 +7,7 @@ public class UnitTest1
     [Fact]
     public async Task Test1()
     {
-        await ProjectAnalyzer.ScanDepsJson(Path.Combine("C:", "Users", "phhaw", "git", "NuGetConsolidator", "NuGetConsolidator.Core"));
+        await ProjectAnalyzer.GetRedundantPackages(Path.Combine("C:", "Users", "phhaw", "git", "NuGetConsolidator", "NuGetConsolidator.Core"));
         var commandResult = Utilities.RunDotNetCommand("C:", "cool");
     }
 }

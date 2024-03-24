@@ -1,11 +1,11 @@
 ﻿using NuGet.Common;
 using NuGet.ProjectModel;
 
-namespace NuGetConsolidator.Core.Providers;
+namespace NuGetConsolidator.Core;
 
-internal class LockFileProvider
+public class LockFileGenerator
 {
-    internal LockFile GetLockFile(string projectPath, string outputPath)
+    public LockFile GetLockFile(string projectPath, string outputPath)
     {
         var directoryName = Path.GetDirectoryName(projectPath);
         var arguments = new[] { "restore", $"\"{projectPath}\"" };

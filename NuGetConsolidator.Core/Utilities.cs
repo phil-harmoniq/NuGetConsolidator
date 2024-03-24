@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using NuGet.ProjectModel;
+using System.Diagnostics;
 using System.Text;
 
 namespace NuGetConsolidator.Core;
@@ -51,29 +54,22 @@ public static class Utilities
         }
     }
 
-    private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)
+    public static DependencyGraphSpec GenerateDependencyGraph(string projectPath)
     {
-        await Task.Yield();
+        var graphOutputFile = Path.GetTempFileName();
+        var arguments = new[] { "msbuild", $"\"{projectPath}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath={graphOutputFile}" };
+        var directoryName = Path.GetDirectoryName(projectPath);
 
-        string line;
-        while ((line = await reader.ReadLineAsync()) != null)
+        var commandResult = Utilities.RunDotNetCommand(directoryName, arguments);
+
+        if (commandResult.IsSuccessful)
         {
-            lines.AppendLine(line);
+            var dependencyGraphText = File.ReadAllText(graphOutputFile);
+            return new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText));
         }
-    }
-
-    public class CommandResult
-    {
-        public string Output { get; }
-        public string Error { get; }
-        public int ExitCode { get; }
-        public bool IsSuccessful => ExitCode == 0;
-
-        internal CommandResult(string output, string error, int exitCode)
+        else
         {
-            Output = output;
-            Error = error;
-            ExitCode = exitCode;
+            throw new Exception($"Error generating dependency graph output.{Environment.NewLine}{commandResult.Output}{commandResult.Error}");
         }
     }
 }

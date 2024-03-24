@@ -6,6 +6,6 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        await ProjectAnalyzer.ScanDepsJson("C:\\Users\\phhaw\\git\\NuGetConsolidator\\NuGetConsolidator.Example");
+        await ProjectAnalyzer.GetRedundantPackages("C:\\Users\\phhaw\\git\\NuGetConsolidator\\NuGetConsolidator.Example");
     }
 }
