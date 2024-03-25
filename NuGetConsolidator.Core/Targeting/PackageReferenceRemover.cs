@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Build.Evaluation;
 
 namespace NuGetConsolidator.Core.Targeting;
-internal class PackageReferenceRemover
+
+public class PackageReferenceRemover
 {
 }
