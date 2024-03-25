@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using NuGet.ProjectModel;
 
-namespace NuGetConsolidator.Core;
+namespace NuGetConsolidator.Core.Modification;
 public class DependencyGraphGenerator
 {
     public string GraphOutputFile { get; }

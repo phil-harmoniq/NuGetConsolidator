@@ -1,9 +1,10 @@
 ﻿using NuGet.Packaging;
 using NuGet.ProjectModel;
+using NuGetConsolidator.Core.Models;
 
-namespace NuGetConsolidator.Core;
+namespace NuGetConsolidator.Core.Modification;
 
-public static partial class ProjectAnalyzer
+public static class ProjectAnalyzer
 {
     public static async Task<IList<Project>> GetRedundantPackages(string projectPath)
     {

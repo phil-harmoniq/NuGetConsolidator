@@ -1,6 +1,6 @@
 ﻿using NuGet.ProjectModel;
 using NuGet.Versioning;
-using NuGetConsolidator.Core;
+using NuGetConsolidator.Core.Modification;
 
 namespace NuGetConsolidator.Tests;
 

@@ -1,4 +1,4 @@
-﻿using NuGetConsolidator.Core;
+﻿using NuGetConsolidator.Core.Modification;
 
 namespace NuGetConsolidator.Cli;
 

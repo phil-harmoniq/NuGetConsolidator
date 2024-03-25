@@ -1,4 +1,4 @@
-﻿namespace NuGetConsolidator.Core;
+﻿namespace NuGetConsolidator.Core.Models;
 
 public class CommandResult
 {
