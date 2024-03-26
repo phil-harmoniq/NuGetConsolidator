@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using NuGetConsolidator.Core.Models;
 
-namespace NuGetConsolidator.Core.Modification;
+namespace NuGetConsolidator.Core.Targeting;
 
 public class DotNetCommandRunner : IDisposable
 {

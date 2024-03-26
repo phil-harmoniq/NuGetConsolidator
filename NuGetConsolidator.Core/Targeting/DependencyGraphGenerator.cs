@@ -2,7 +2,8 @@
 using Newtonsoft.Json.Linq;
 using NuGet.ProjectModel;
 
-namespace NuGetConsolidator.Core.Modification;
+namespace NuGetConsolidator.Core.Targeting;
+
 public class DependencyGraphGenerator
 {
     public string GraphOutputFile { get; }
@@ -23,8 +24,8 @@ public class DependencyGraphGenerator
 
             if (commandResult.IsSuccessful)
             {
-                var dependencyGraphText = File.ReadAllText(GraphOutputFile);
-                return new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText));
+                //var dependencyGraphText = File.ReadAllText(GraphOutputFile);
+                return DependencyGraphSpec.Load(GraphOutputFile);
             }
             else
             {

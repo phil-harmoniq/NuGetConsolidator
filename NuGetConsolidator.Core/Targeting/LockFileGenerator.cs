@@ -1,7 +1,8 @@
 ﻿using NuGet.Common;
 using NuGet.ProjectModel;
+using NuGetConsolidator.Core.Modification;
 
-namespace NuGetConsolidator.Core.Modification;
+namespace NuGetConsolidator.Core.Targeting;
 
 public class LockFileGenerator
 {

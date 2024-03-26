@@ -1,8 +1,9 @@
 ﻿using NuGet.Packaging;
 using NuGet.ProjectModel;
 using NuGetConsolidator.Core.Models;
+using NuGetConsolidator.Core.Modification;
 
-namespace NuGetConsolidator.Core.Modification;
+namespace NuGetConsolidator.Core.Targeting;
 
 public static class ProjectAnalyzer
 {

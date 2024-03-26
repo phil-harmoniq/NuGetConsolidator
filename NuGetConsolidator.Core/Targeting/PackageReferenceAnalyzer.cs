@@ -1,6 +1,6 @@
 ﻿using NuGet.ProjectModel;
 
-namespace NuGetConsolidator.Core.Modification;
+namespace NuGetConsolidator.Core.Targeting;
 
 public class PackageReferenceAnalyzer
 {
