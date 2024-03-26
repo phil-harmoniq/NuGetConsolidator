@@ -1,5 +1,5 @@
-﻿using NuGet.ProjectModel;
-using NuGet.Versioning;
+﻿using NuGet.Versioning;
+using NuGetConsolidator.Core.Modification;
 using NuGetConsolidator.Core.Targeting;
 
 namespace NuGetConsolidator.Tests;
@@ -25,5 +25,19 @@ public class VersioningTests
         var solutionDir = Path.Combine(baseDir, "..", "..", "..", "..");
         var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example");
         var projects = await ProjectAnalyzer.GetRedundantPackages(exampleDir);
+    }
+
+    [Fact]
+    public async Task Test3()
+    {
+        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        var solutionDir = Path.Combine(baseDir, "..", "..", "..", "..");
+        var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example", "NuGetConsolidator.Example.csproj");
+        var projects = await ProjectAnalyzer.GetRedundantPackages(exampleDir);
+
+        foreach (var library in projects.First().TargetFrameworks.First().RedundantLibraries)
+        {
+            var result = MsBuildHelper.RemovePackageReference(exampleDir, library.Name);
+        }
     }
 }
