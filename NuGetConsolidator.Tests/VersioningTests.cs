@@ -32,12 +32,15 @@ public class VersioningTests
     {
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
         var solutionDir = Path.Combine(baseDir, "..", "..", "..", "..");
-        var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example", "NuGetConsolidator.Example.csproj");
+        var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example") + "\\";
         var projects = await ProjectAnalyzer.GetRedundantPackages(exampleDir);
 
-        foreach (var library in projects.First().TargetFrameworks.First().RedundantLibraries)
+        foreach (var project in projects)
         {
-            var result = MsBuildHelper.RemovePackageReference(exampleDir, library.Name);
+            foreach (var library in project.TargetFrameworks.First().RedundantLibraries)
+            {
+                var result = MsBuildHelper.RemovePackageReference(exampleDir, library.Name);
+            }
         }
     }
 }

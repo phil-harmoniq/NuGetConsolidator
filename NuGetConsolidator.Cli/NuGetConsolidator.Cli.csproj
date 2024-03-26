@@ -2,15 +2,20 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<TargetFrameworks>net472;net48;net481;net6.0;net7.0;net8.0</TargetFrameworks>-->
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NuGetConsolidator.Core\NuGetConsolidator.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
 
 </Project>

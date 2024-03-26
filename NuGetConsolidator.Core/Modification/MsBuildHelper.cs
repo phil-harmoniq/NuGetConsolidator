@@ -1,7 +1,7 @@
 ﻿using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
-using Microsoft.CodeAnalysis.MSBuild;
+//using Microsoft.CodeAnalysis.MSBuild;
 using NuGet.LibraryModel;
 using NuGet.Versioning;
 using System.Globalization;
@@ -18,10 +18,9 @@ public static class MsBuildHelper
 
     static MsBuildHelper()
     {
-        //Environment.SetEnvironmentVariable("MSBuildSDKsPath", "C:\\Program Files\\dotnet\\sdk\\8.0.202\\Sdks");
-        //var path = Environment.GetEnvironmentVariable("MSBuildSDKsPath");
-        MSBuildLocator.RegisterDefaults();
-        MSBuildWorkspace.Create();
+        // We need to locate the MsBuild files or else tools in this class will fail.
+        // https://github.com/dotnet/msbuild/issues/9026#issuecomment-1635592061
+        var instance = MSBuildLocator.RegisterDefaults();
     }
 
     public static int RemovePackageReference(string projectPath, string packageName)
