@@ -9,15 +9,8 @@ public static class ProjectAnalyzer
 {
     public static async Task<IList<Project>> GetRedundantPackages(string projectPath)
     {
-        // Trim trailing slash if directory. Trailing slash is not supported in dotnet command.
-        var fileAttributes = File.GetAttributes(projectPath);
-        if (fileAttributes.HasFlag(FileAttributes.Directory))
-        {
-            var dir = new DirectoryInfo(projectPath);
-            projectPath = Path.Combine(dir.Parent.ToString(), dir.Name);
-        }
 
-        var dependencyGraphGeneratore = new DependencyGraphGenerator();
+        using var dependencyGraphGeneratore = new DependencyGraphGenerator();
         var dependencyGraph = dependencyGraphGeneratore.GetDependencyGraph(projectPath);
         var projects = new List<Project>();
 
@@ -33,7 +26,6 @@ public static class ProjectAnalyzer
             var redundantLibraries = new List<LockFileTargetLibrary>();
 
             Console.WriteLine(project.Name);
-            Console.WriteLine(project.Language);
             Console.WriteLine(project.Version);
 
             var redundantTopLevelPackagesForAllTargets = new List<LockFileTargetLibrary>();

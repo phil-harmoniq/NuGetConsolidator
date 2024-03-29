@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using NuGet.ProjectModel;
+﻿using NuGet.ProjectModel;
+using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Core.Targeting;
 
-public class DependencyGraphGenerator
+public class DependencyGraphGenerator : IDisposable
 {
     public string GraphOutputFile { get; }
 
@@ -15,8 +14,9 @@ public class DependencyGraphGenerator
 
     public DependencyGraphSpec GetDependencyGraph(string projectPath)
     {
-        var arguments = new[] { "msbuild", $"\"{projectPath}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath={GraphOutputFile}" };
-        var directoryName = Path.GetDirectoryName(projectPath);
+        var path = projectPath.SanitizePath();
+        var arguments = new[] { "msbuild", $"\"{path}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath={GraphOutputFile}" };
+        var directoryName = Path.GetDirectoryName(path);
 
         using (var commandRunner = new DotNetCommandRunner(directoryName, arguments))
         {
@@ -32,5 +32,10 @@ public class DependencyGraphGenerator
                 throw new Exception($"Error generating dependency graph output.{Environment.NewLine}{commandResult.Output}{commandResult.Error}");
             }
         }
+    }
+
+    public void Dispose()
+    {
+        File.Delete(GraphOutputFile);
     }
 }

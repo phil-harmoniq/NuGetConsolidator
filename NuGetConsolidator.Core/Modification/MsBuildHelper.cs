@@ -75,6 +75,57 @@ public static class MsBuildHelper
     }
 
     /// <summary>
+    /// Remove all package references to the project.
+    /// </summary>
+    /// <param name="projectPath">Path to the csproj file of the project.</param>
+    /// <param name="libraryDependency">Package Dependency of the package to be removed.</param>
+    private static int RemovePackageReferences(string projectPath, LibraryDependency[] libraryDependencies)
+    {
+        var project = GetProject(projectPath);
+
+        try
+        {
+            foreach (var libraryDependency in libraryDependencies)
+            {
+                var existingPackageReferences = project.ItemsIgnoringCondition
+                    .Where(item => item.ItemType.Equals(PACKAGE_REFERENCE_TYPE_TAG, StringComparison.OrdinalIgnoreCase) &&
+                                   item.EvaluatedInclude.Equals(libraryDependency.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (existingPackageReferences.Any())
+                {
+                    //// We validate that the operation does not remove any imported items
+                    //// If it does then we throw a user friendly exception without making any changes
+                    //ValidateNoImportedItemsAreUpdated(existingPackageReferences, libraryDependency, REMOVE_OPERATION);
+
+                    project.RemoveItems(existingPackageReferences);
+                }
+                else
+                {
+                    //Logger.LogError(string.Format(CultureInfo.CurrentCulture,
+                    //    Strings.Error_UpdatePkgNoSuchPackage,
+                    //    project.FullPath,
+                    //    libraryDependency.Name,
+                    //    REMOVE_OPERATION));
+                    //ProjectCollection.GlobalProjectCollection.UnloadProject(project);
+                }
+            }
+
+            project.Save();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+        finally
+        {
+            ProjectCollection.GlobalProjectCollection.UnloadProject(project);
+        }
+
+        return 1;
+    }
+
+    /// <summary>
     /// Opens an MSBuild.Evaluation.Project type from a csproj file.
     /// </summary>
     /// <param name="projectCSProjPath">CSProj file which needs to be evaluated</param>
