@@ -25,22 +25,28 @@ public static class Program
             getDefaultValue: () => false,
             description: "Prompt for user confirmation before removing packages.");
 
+        var dryRunOption = new Option<bool>(
+            aliases: new[] { "--dry-run", },
+            getDefaultValue: () => false,
+            description: "List packages to remove without modifying project files.");
+
         var rootCommand = new RootCommand("Consolidate redundant package references in .NET project files and solutions")
         {
             verboseOption,
             pathOption,
             interactiveOption,
+            dryRunOption
         };
 
-        rootCommand.SetHandler(async (verbose, path, interactive) =>
+        rootCommand.SetHandler(async (verbose, path, interactive, dryRun) =>
         {
-            await ConsolidatePackages(verbose, path, interactive);
-        }, verboseOption, pathOption, interactiveOption);
+            await ConsolidatePackages(verbose, path, interactive, dryRun);
+        }, verboseOption, pathOption, interactiveOption, dryRunOption);
 
         return await rootCommand.InvokeAsync(args);
     }
 
-    private static async Task ConsolidatePackages(bool verbose, string path, bool interactive)
+    private static async Task ConsolidatePackages(bool verbose, string path, bool interactive, bool dryRun)
     {
         var projects = await ProjectAnalyzer.GetRedundantPackages(path);
 

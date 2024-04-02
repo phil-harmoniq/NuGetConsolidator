@@ -2,27 +2,19 @@
 
 namespace NuGetConsolidator.Tests.Unit;
 
-public class DependencyGraphGeneratorTests : IDisposable
+public class DependencyGraphGeneratorTests : TestBase, IDisposable
 {
-    private readonly string _solutionPath;
-    private readonly string _examplePath;
-    private readonly DependencyGraphGenerator _dependencyGraphGenerator;
+    public readonly DependencyGraphGenerator DependencyGraphGenerator;
 
     public DependencyGraphGeneratorTests()
     {
-        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var solutionPath = Path.Combine(baseDir, "..", "..", "..", "..");
-        var examplePath = Path.Combine(solutionPath, "NuGetConsolidator.Example") + "\\";
-
-        _solutionPath = solutionPath;
-        _examplePath = examplePath;
-        _dependencyGraphGenerator = new DependencyGraphGenerator();
+        DependencyGraphGenerator = new DependencyGraphGenerator();
     }
 
     [Fact]
     public void ValidForProjectFolder()
     {
-        var deps = _dependencyGraphGenerator.GetDependencyGraph(_examplePath);
+        var deps = DependencyGraphGenerator.GetDependencyGraph(ExamplePath);
 
         Assert.NotNull(deps);
         Assert.Single(deps.Projects);
@@ -32,8 +24,8 @@ public class DependencyGraphGeneratorTests : IDisposable
     [Fact]
     public void ValidForProjectFile()
     {
-        var path = Path.Combine(_examplePath, "NuGetConsolidator.Example.csproj");
-        var deps = _dependencyGraphGenerator.GetDependencyGraph(path);
+        var path = Path.Combine(ExamplePath, "NuGetConsolidator.Example.csproj");
+        var deps = DependencyGraphGenerator.GetDependencyGraph(path);
 
         Assert.NotNull(deps);
         Assert.Single(deps.Projects);
@@ -43,7 +35,7 @@ public class DependencyGraphGeneratorTests : IDisposable
     [Fact]
     public void ValidForSolutionFolder()
     {
-        var deps = _dependencyGraphGenerator.GetDependencyGraph(_solutionPath);
+        var deps = DependencyGraphGenerator.GetDependencyGraph(SolutionPath);
 
         Assert.NotNull(deps);
         Assert.Equal(4, deps.Projects.Count);
@@ -56,8 +48,8 @@ public class DependencyGraphGeneratorTests : IDisposable
     [Fact]
     public void ValidForSolutionFile()
     {
-        var path = Path.Combine(_solutionPath, "NuGetConsolidator.sln");
-        var deps = _dependencyGraphGenerator.GetDependencyGraph(path);
+        var path = Path.Combine(SolutionPath, "NuGetConsolidator.sln");
+        var deps = DependencyGraphGenerator.GetDependencyGraph(path);
 
         Assert.NotNull(deps);
         Assert.Equal(4, deps.Projects.Count);
@@ -70,16 +62,16 @@ public class DependencyGraphGeneratorTests : IDisposable
     [Fact]
     public void InvalidFileThrowsException()
     {
-        var path = Path.Combine(_examplePath, "NuGetConsolidator.None.csproj");
+        var path = Path.Combine(ExamplePath, "NuGetConsolidator.None.csproj");
 
         Assert.Throws<FileNotFoundException>(() =>
         {
-            var deps = _dependencyGraphGenerator.GetDependencyGraph(path);
+            var deps = DependencyGraphGenerator.GetDependencyGraph(path);
         });
     }
 
     public void Dispose()
     {
-        _dependencyGraphGenerator.Dispose();
+        DependencyGraphGenerator.Dispose();
     }
 }

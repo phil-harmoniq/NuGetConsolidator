@@ -1,7 +1,5 @@
-﻿using NuGet.Packaging;
-using NuGet.ProjectModel;
+﻿using NuGet.ProjectModel;
 using NuGetConsolidator.Core.Models;
-using NuGetConsolidator.Core.Modification;
 
 namespace NuGetConsolidator.Core.Targeting;
 
@@ -10,8 +8,8 @@ public static class ProjectAnalyzer
     public static async Task<IList<Project>> GetRedundantPackages(string projectPath)
     {
 
-        using var dependencyGraphGeneratore = new DependencyGraphGenerator();
-        var dependencyGraph = dependencyGraphGeneratore.GetDependencyGraph(projectPath);
+        using var dependencyGraphGenerator = new DependencyGraphGenerator();
+        var dependencyGraph = dependencyGraphGenerator.GetDependencyGraph(projectPath);
         var projects = new List<Project>();
 
         foreach (var project in dependencyGraph.Projects)

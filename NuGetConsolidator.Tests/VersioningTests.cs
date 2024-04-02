@@ -39,7 +39,10 @@ public class VersioningTests
         {
             foreach (var library in project.TargetFrameworks.First().RedundantLibraries)
             {
-                var result = MsBuildHelper.RemovePackageReference(exampleDir, library.Name);
+                Assert.ThrowsAny<Exception>(() =>
+                {
+                    MsBuildHelper.RemovePackageReference(exampleDir, library.Name);
+                });
             }
         }
     }

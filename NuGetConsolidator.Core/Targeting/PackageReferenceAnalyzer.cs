@@ -18,6 +18,15 @@ public class PackageReferenceAnalyzer
         AllPackages = allPackages.ToDictionary(x => x.Name);
     }
 
+    public PackageReferenceAnalyzer(ProjectFileDependencyGroup projectFileDependencyGroup, LockFile lockFile)
+    {
+        var topLevelPackageNames = projectFileDependencyGroup.Dependencies.Select(GetPackageName);
+        var target = lockFile.Targets.FirstOrDefault(x => x.Name == projectFileDependencyGroup.FrameworkName);
+        FrameworkName = projectFileDependencyGroup.FrameworkName;
+        TopLevelPackages = target.Libraries.Where(library => topLevelPackageNames.Contains(library.Name)).ToDictionary(x => x.Name);
+        AllPackages = target.Libraries.ToDictionary(x => x.Name);
+    }
+
     public IReadOnlyList<LockFileTargetLibrary> GetRedundantPackages()
     {
         var topLevelPackageList = TopLevelPackages.Values;
@@ -40,5 +49,12 @@ public class PackageReferenceAnalyzer
         }
 
         return redundantTopLevelPackages;
+    }
+
+    private static string GetPackageName(string message)
+    {
+        var stringSplit = message.Split(' ');
+        var name = stringSplit[0];
+        return name;
     }
 }
