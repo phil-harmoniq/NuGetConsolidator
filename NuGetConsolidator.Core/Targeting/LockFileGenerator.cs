@@ -8,7 +8,7 @@ public class LockFileGenerator
 {
     private static readonly ILogger _logger = LogBase.Create<LockFileGenerator>();
 
-    public LockFile GetLockFile(string projectPath, string outputPath)
+    public async Task<LockFile> GetLockFile(string projectPath, string outputPath)
     {
         _logger.LogInformation($"Generating lock file for {projectPath} at {outputPath}");
 
@@ -17,7 +17,7 @@ public class LockFileGenerator
 
         using (var commandRunner = new DotNetCommandRunner(directoryName, arguments))
         {
-            var commandResult = commandRunner.Execute();
+            var commandResult = await commandRunner.ExecuteAsync();
             var outputLockFile = Path.Combine(outputPath, "project.assets.json");
             var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NuGet.Common.NullLogger.Instance);
             return lockFile;

@@ -12,9 +12,9 @@ public class DependencyGraphGeneratorTests : TestBase, IDisposable
     }
 
     [Fact]
-    public void ValidForProjectFolder()
+    public async Task ValidForProjectFolder()
     {
-        var deps = DependencyGraphGenerator.GetDependencyGraph(ExamplePath);
+        var deps = await DependencyGraphGenerator.GetDependencyGraph(ExamplePath);
 
         Assert.NotNull(deps);
         Assert.Single(deps.Projects);
@@ -22,10 +22,10 @@ public class DependencyGraphGeneratorTests : TestBase, IDisposable
     }
 
     [Fact]
-    public void ValidForProjectFile()
+    public async Task ValidForProjectFile()
     {
         var path = Path.Combine(ExamplePath, "NuGetConsolidator.Example.csproj");
-        var deps = DependencyGraphGenerator.GetDependencyGraph(path);
+        var deps = await DependencyGraphGenerator.GetDependencyGraph(path);
 
         Assert.NotNull(deps);
         Assert.Single(deps.Projects);
@@ -33,9 +33,9 @@ public class DependencyGraphGeneratorTests : TestBase, IDisposable
     }
 
     [Fact]
-    public void ValidForSolutionFolder()
+    public async Task ValidForSolutionFolder()
     {
-        var deps = DependencyGraphGenerator.GetDependencyGraph(SolutionPath);
+        var deps = await DependencyGraphGenerator.GetDependencyGraph(SolutionPath);
 
         Assert.NotNull(deps);
         Assert.Equal(4, deps.Projects.Count);
@@ -46,10 +46,10 @@ public class DependencyGraphGeneratorTests : TestBase, IDisposable
     }
 
     [Fact]
-    public void ValidForSolutionFile()
+    public async Task ValidForSolutionFile()
     {
         var path = Path.Combine(SolutionPath, "NuGetConsolidator.sln");
-        var deps = DependencyGraphGenerator.GetDependencyGraph(path);
+        var deps = await DependencyGraphGenerator.GetDependencyGraph(path);
 
         Assert.NotNull(deps);
         Assert.Equal(4, deps.Projects.Count);
@@ -60,13 +60,13 @@ public class DependencyGraphGeneratorTests : TestBase, IDisposable
     }
 
     [Fact]
-    public void InvalidFileThrowsException()
+    public async Task InvalidFileThrowsException()
     {
         var path = Path.Combine(ExamplePath, "NuGetConsolidator.None.csproj");
 
-        Assert.Throws<FileNotFoundException>(() =>
+        await Assert.ThrowsAsync<FileNotFoundException>(async () =>
         {
-            var deps = DependencyGraphGenerator.GetDependencyGraph(path);
+            var deps = await DependencyGraphGenerator.GetDependencyGraph(path);
         });
     }
 

@@ -10,6 +10,6 @@ public class LockFileGeneratorTestFixture : TestBase
     public LockFileGeneratorTestFixture()
     {
         using var dependencyGraphGenerator = new DependencyGraphGenerator();
-        DependencyGraph = dependencyGraphGenerator.GetDependencyGraph(SolutionPath);
+        DependencyGraph = dependencyGraphGenerator.GetDependencyGraph(SolutionPath).Result;
     }
 }

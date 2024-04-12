@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using NuGetConsolidator.Core.Modification;
 using NuGetConsolidator.Core.Targeting;
 using NuGetConsolidator.Core.Utilities;
 using System.CommandLine;
@@ -10,7 +9,7 @@ public static class Program
 {
     private static readonly string _currentPath = Directory.GetCurrentDirectory();
 
-    public static int Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         //var file = new FileInfo("C:\\Users\\phhaw\\git\\NuGetConsolidator\\NuGetConsolidator.Example");
         var verboseOption = new Option<bool>(
@@ -41,21 +40,21 @@ public static class Program
             dryRunOption
         };
 
-        rootCommand.SetHandler((verbose, path, interactive, dryRun) =>
+        rootCommand.SetHandler(async (verbose, path, interactive, dryRun) =>
         {
             if (verbose)
             {
                 LogBase.Init(LogLevel.Debug);
             }
 
-                ConsolidatePackages(verbose, path, interactive, dryRun);
+            await ConsolidatePackages(verbose, path, interactive, dryRun);
         }, verboseOption, pathOption, interactiveOption, dryRunOption);
-        return rootCommand.Invoke(args);
+        return await rootCommand.InvokeAsync(args);
     }
 
-    private static void ConsolidatePackages(bool verbose, string path, bool interactive, bool dryRun)
+    private static async Task ConsolidatePackages(bool verbose, string path, bool interactive, bool dryRun)
     {
-        var projects = ProjectAnalyzer.GetRedundantPackages(path);
+        var projects = await ProjectAnalyzer.GetRedundantPackages(path);
 
         foreach (var project in projects)
         {

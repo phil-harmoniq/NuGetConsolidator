@@ -8,10 +8,10 @@ public class ProjectAnalyzer
 {
     private static readonly ILogger _logger = LogBase.Create<ProjectAnalyzer>();
 
-    public static IList<Project> GetRedundantPackages(string projectPath)
+    public static async Task<IList<Project>> GetRedundantPackages(string projectPath)
     {
         using var dependencyGraphGenerator = new DependencyGraphGenerator();
-        var dependencyGraph = dependencyGraphGenerator.GetDependencyGraph(projectPath);
+        var dependencyGraph = await dependencyGraphGenerator.GetDependencyGraph(projectPath);
         var projects = new List<Project>();
 
         foreach (var project in dependencyGraph.Projects)
@@ -22,7 +22,7 @@ public class ProjectAnalyzer
             };
 
             var lockFileGenerator = new LockFileGenerator();
-            var lockFile = lockFileGenerator.GetLockFile(projectPath, project.RestoreMetadata.OutputPath);
+            var lockFile = await lockFileGenerator.GetLockFile(projectPath, project.RestoreMetadata.OutputPath);
 
             foreach (var projectFileDependencyGroup in lockFile.ProjectFileDependencyGroups)
             {

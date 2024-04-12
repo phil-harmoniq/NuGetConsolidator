@@ -12,12 +12,12 @@ public class PackageReferenceAnalyzerTestFixture : TestBase
     public PackageReferenceAnalyzerTestFixture()
     {
         using var dependencyGraphGenerator = new DependencyGraphGenerator();
-        DependencyGraph = dependencyGraphGenerator.GetDependencyGraph(SolutionPath);
+        DependencyGraph = dependencyGraphGenerator.GetDependencyGraph(SolutionPath).Result;
         LockFileGenerator = new LockFileGenerator();
 
         foreach (var project in DependencyGraph.Projects)
         {
-            var lockFile = LockFileGenerator.GetLockFile(project.FilePath, project.RestoreMetadata.OutputPath);
+            var lockFile = LockFileGenerator.GetLockFile(project.FilePath, project.RestoreMetadata.OutputPath).Result;
             LockFiles.Add(lockFile);
         }
     }

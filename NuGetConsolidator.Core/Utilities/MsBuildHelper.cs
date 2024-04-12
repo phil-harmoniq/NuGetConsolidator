@@ -4,9 +4,10 @@ using Microsoft.Build.Locator;
 //using Microsoft.CodeAnalysis.MSBuild;
 using NuGet.LibraryModel;
 using NuGet.Versioning;
+using NuGetConsolidator.Core.Extensions;
 using System.Globalization;
 
-namespace NuGetConsolidator.Core.Modification;
+namespace NuGetConsolidator.Core.Utilities;
 
 /// <summary>
 /// Implementation referenced from NuGet.Client repo.
@@ -25,6 +26,7 @@ public static class MsBuildHelper
 
     public static int RemovePackageReference(string projectPath, string packageName)
     {
+        projectPath = projectPath.SanitizePath();
         var libraryDependency = new LibraryDependency
         {
             LibraryRange = new LibraryRange(

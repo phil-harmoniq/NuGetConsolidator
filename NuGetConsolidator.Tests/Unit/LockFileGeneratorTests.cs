@@ -16,11 +16,11 @@ public class LockFileGeneratorTests : IClassFixture<LockFileGeneratorTestFixture
     }
 
     [Fact]
-    public void CanGetLockFileForProject()
+    public async Task CanGetLockFileForProject()
     {
         foreach (var project in DependencyGraph.Projects)
         {
-            var lockFile = LockFileGenerator.GetLockFile(project.FilePath, project.RestoreMetadata.OutputPath);
+            var lockFile = await LockFileGenerator.GetLockFile(project.FilePath, project.RestoreMetadata.OutputPath);
 
             Assert.NotNull(lockFile);
         }

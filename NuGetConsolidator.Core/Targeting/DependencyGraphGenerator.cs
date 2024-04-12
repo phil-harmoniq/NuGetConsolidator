@@ -16,7 +16,7 @@ public class DependencyGraphGenerator : IDisposable
         GraphOutputFile = Path.GetTempFileName();
     }
 
-    public DependencyGraphSpec GetDependencyGraph(string projectPath)
+    public async Task<DependencyGraphSpec> GetDependencyGraph(string projectPath)
     {
         _logger.LogInformation($"Generating dependency graph for {projectPath}");
 
@@ -26,7 +26,7 @@ public class DependencyGraphGenerator : IDisposable
 
         using (var commandRunner = new DotNetCommandRunner(directoryName, arguments))
         {
-            var commandResult = commandRunner.Execute();
+            var commandResult = await commandRunner.ExecuteAsync();
 
             if (commandResult.IsSuccessful)
             {

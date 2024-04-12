@@ -1,6 +1,6 @@
 ﻿using NuGet.Versioning;
-using NuGetConsolidator.Core.Modification;
 using NuGetConsolidator.Core.Targeting;
+using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Tests;
 
@@ -19,21 +19,21 @@ public class VersioningTests
     }
 
     [Fact]
-    public void Test2()
+    public async Task Test2()
     {
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
         var solutionDir = Path.Combine(baseDir, "..", "..", "..", "..");
         var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example");
-        var projects = ProjectAnalyzer.GetRedundantPackages(exampleDir);
+        var projects = await ProjectAnalyzer.GetRedundantPackages(exampleDir);
     }
 
     [Fact]
-    public void Test3()
+    public async Task Test3()
     {
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
         var solutionDir = Path.Combine(baseDir, "..", "..", "..", "..");
         var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example") + "\\";
-        var projects = ProjectAnalyzer.GetRedundantPackages(exampleDir);
+        var projects = await ProjectAnalyzer.GetRedundantPackages(exampleDir);
 
         foreach (var project in projects)
         {
