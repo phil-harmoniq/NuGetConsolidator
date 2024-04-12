@@ -1,10 +1,14 @@
-﻿using NuGet.ProjectModel;
+﻿using Microsoft.Extensions.Logging;
+using NuGet.ProjectModel;
+using NuGetConsolidator.Core.Extensions;
 using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Core.Targeting;
 
 public class DependencyGraphGenerator : IDisposable
 {
+    private static readonly ILogger _logger = LogBase.Create<DependencyGraphGenerator>();
+
     public string GraphOutputFile { get; }
 
     public DependencyGraphGenerator()
@@ -14,6 +18,8 @@ public class DependencyGraphGenerator : IDisposable
 
     public DependencyGraphSpec GetDependencyGraph(string projectPath)
     {
+        _logger.LogInformation($"Generating dependency graph for {projectPath}");
+
         var path = projectPath.SanitizePath();
         var arguments = new[] { "msbuild", $"\"{path}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath={GraphOutputFile}" };
         var directoryName = Path.GetDirectoryName(path);
@@ -25,11 +31,14 @@ public class DependencyGraphGenerator : IDisposable
             if (commandResult.IsSuccessful)
             {
                 //var dependencyGraphText = File.ReadAllText(GraphOutputFile);
+                _logger.LogInformation($"Generated dependency graph at {GraphOutputFile}");
                 return DependencyGraphSpec.Load(GraphOutputFile);
             }
             else
             {
-                throw new Exception($"Error generating dependency graph output.{Environment.NewLine}{commandResult.Output}{commandResult.Error}");
+                var message = $"Error generating dependency graph output.{Environment.NewLine}{commandResult.Output}{commandResult.Error}";
+                _logger.LogError(message);
+                throw new Exception(message);
             }
         }
     }

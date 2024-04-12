@@ -1,13 +1,17 @@
-﻿using NuGet.Common;
+﻿using Microsoft.Extensions.Logging;
 using NuGet.ProjectModel;
-using NuGetConsolidator.Core.Modification;
+using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Core.Targeting;
 
 public class LockFileGenerator
 {
+    private static readonly ILogger _logger = LogBase.Create<LockFileGenerator>();
+
     public LockFile GetLockFile(string projectPath, string outputPath)
     {
+        _logger.LogInformation($"Generating lock file for {projectPath} at {outputPath}");
+
         var directoryName = Path.GetDirectoryName(projectPath);
         var arguments = new[] { "restore", $"\"{projectPath}\"" };
 
@@ -15,7 +19,7 @@ public class LockFileGenerator
         {
             var commandResult = commandRunner.Execute();
             var outputLockFile = Path.Combine(outputPath, "project.assets.json");
-            var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NullLogger.Instance);
+            var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NuGet.Common.NullLogger.Instance);
             return lockFile;
         }
     }

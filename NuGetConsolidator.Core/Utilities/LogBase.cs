@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace NuGetConsolidator.Core.Utilities;
 
@@ -10,17 +11,21 @@ public static class LogBase
     {
         _loggerFactory = LoggerFactory.Create(builder =>
         {
-            builder.AddConsole(console =>
+            builder.AddSimpleConsole(console =>
             {
-                console.LogToStandardErrorThreshold = LogLevel.Error;
+                console.IncludeScopes = false;
+                console.ColorBehavior = LoggerColorBehavior.Enabled;
             });
         });
     }
 
-    public static void Log<T>(LogLevel logLevel, string message, Exception ex)
+    public static void Init(LogLevel minimumLevel)
     {
-        var logger = _loggerFactory.CreateLogger<T>();
-
-        logger.Log(logLevel, message, ex);
+        _loggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder.SetMinimumLevel(minimumLevel);
+        });
     }
+
+    public static ILogger Create<T>() => _loggerFactory.CreateLogger<T>();
 }

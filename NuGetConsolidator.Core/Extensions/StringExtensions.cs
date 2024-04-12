@@ -1,6 +1,6 @@
-﻿namespace NuGetConsolidator.Core.Utilities;
+﻿namespace NuGetConsolidator.Core.Extensions;
 
-public static class PathHelper
+public static class StringExtensions
 {
     public static string SanitizePath(this string path)
     {

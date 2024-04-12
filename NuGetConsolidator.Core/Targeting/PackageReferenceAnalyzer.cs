@@ -1,40 +1,41 @@
-﻿using NuGet.ProjectModel;
+﻿using Microsoft.Extensions.Logging;
+using NuGet.ProjectModel;
+using NuGetConsolidator.Core.Extensions;
+using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Core.Targeting;
 
 public class PackageReferenceAnalyzer
 {
+    private static readonly ILogger _logger = LogBase.Create<PackageReferenceAnalyzer>();
+
     public string FrameworkName { get; }
-    public IReadOnlyDictionary<string, LockFileTargetLibrary> TopLevelPackages { get; }
-    public IReadOnlyDictionary<string, LockFileTargetLibrary> AllPackages { get; }
+    public IList<LockFileTargetLibrary> TopLevelPackages { get; }
+    public IList<LockFileTargetLibrary> AllPackages { get; }
 
-    public PackageReferenceAnalyzer(
-        string frameworkName,
-        IEnumerable<LockFileTargetLibrary> topLevelPackages,
-        IEnumerable<LockFileTargetLibrary> allPackages)
-    {
-        FrameworkName = frameworkName;
-        TopLevelPackages = topLevelPackages.ToDictionary(x => x.Name);
-        AllPackages = allPackages.ToDictionary(x => x.Name);
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="projectFileDependencyGroup">Contains the top-level dependencies defined in the project file as strings.</param>
+    /// <param name="lockFile">Contains additional details about the project file.</param>
     public PackageReferenceAnalyzer(ProjectFileDependencyGroup projectFileDependencyGroup, LockFile lockFile)
     {
-        var topLevelPackageNames = projectFileDependencyGroup.Dependencies.Select(GetPackageName);
-        var target = lockFile.Targets.FirstOrDefault(x => x.Name == projectFileDependencyGroup.FrameworkName);
+        var topLevelPackageNames = projectFileDependencyGroup.GetPackageReferenceNames();
+        var target = lockFile.Targets.First(x => x.Name == projectFileDependencyGroup.FrameworkName);
         FrameworkName = projectFileDependencyGroup.FrameworkName;
-        TopLevelPackages = target.Libraries.Where(library => topLevelPackageNames.Contains(library.Name)).ToDictionary(x => x.Name);
-        AllPackages = target.Libraries.ToDictionary(x => x.Name);
+        TopLevelPackages = target.GetLibraries(topLevelPackageNames);
+        AllPackages = target.Libraries;
     }
 
     public IReadOnlyList<LockFileTargetLibrary> GetRedundantPackages()
     {
-        var topLevelPackageList = TopLevelPackages.Values;
+        _logger.LogInformation($"Scanning redundant top-level package references for {FrameworkName}");
+
         var redundantTopLevelPackages = new List<LockFileTargetLibrary>();
 
-        foreach (var library in topLevelPackageList)
+        foreach (var library in TopLevelPackages)
         {
-            var otherTopLevelPackages = topLevelPackageList.Where(x => x.Name != library.Name);
+            var otherTopLevelPackages = TopLevelPackages.Where(x => x.Name != library.Name);
 
             foreach (var topLevelPackageToCheck in otherTopLevelPackages)
             {
@@ -49,12 +50,5 @@ public class PackageReferenceAnalyzer
         }
 
         return redundantTopLevelPackages;
-    }
-
-    private static string GetPackageName(string message)
-    {
-        var stringSplit = message.Split(' ');
-        var name = stringSplit[0];
-        return name;
     }
 }

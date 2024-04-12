@@ -1,13 +1,15 @@
-﻿using NuGet.ProjectModel;
+﻿using Microsoft.Extensions.Logging;
 using NuGetConsolidator.Core.Models;
+using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Core.Targeting;
 
-public static class ProjectAnalyzer
+public class ProjectAnalyzer
 {
-    public static async Task<IList<Project>> GetRedundantPackages(string projectPath)
-    {
+    private static readonly ILogger _logger = LogBase.Create<ProjectAnalyzer>();
 
+    public static IList<Project> GetRedundantPackages(string projectPath)
+    {
         using var dependencyGraphGenerator = new DependencyGraphGenerator();
         var dependencyGraph = dependencyGraphGenerator.GetDependencyGraph(projectPath);
         var projects = new List<Project>();
@@ -21,21 +23,10 @@ public static class ProjectAnalyzer
 
             var lockFileGenerator = new LockFileGenerator();
             var lockFile = lockFileGenerator.GetLockFile(projectPath, project.RestoreMetadata.OutputPath);
-            var redundantLibraries = new List<LockFileTargetLibrary>();
-
-            Console.WriteLine(project.Name);
-            Console.WriteLine(project.Version);
-
-            var redundantTopLevelPackagesForAllTargets = new List<LockFileTargetLibrary>();
-
 
             foreach (var projectFileDependencyGroup in lockFile.ProjectFileDependencyGroups)
             {
-
-                var topLevelPackageNames = projectFileDependencyGroup.Dependencies.Select(GetPackageName);
-                var target = lockFile.Targets.FirstOrDefault(x => x.Name == projectFileDependencyGroup.FrameworkName);
-                var topLevelPackages = target.Libraries.Where(library => topLevelPackageNames.Contains(library.Name));
-                var projectMeta = new PackageReferenceAnalyzer(target.Name, topLevelPackages, target.Libraries);
+                var projectMeta = new PackageReferenceAnalyzer(projectFileDependencyGroup, lockFile);
                 var redundantTopLevelPackages = projectMeta.GetRedundantPackages();
 
                 var returnedFramework = new TargetFramework

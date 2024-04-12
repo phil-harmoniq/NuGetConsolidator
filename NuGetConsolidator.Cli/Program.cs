@@ -1,5 +1,7 @@
-﻿using NuGetConsolidator.Core.Modification;
+﻿using Microsoft.Extensions.Logging;
+using NuGetConsolidator.Core.Modification;
 using NuGetConsolidator.Core.Targeting;
+using NuGetConsolidator.Core.Utilities;
 using System.CommandLine;
 
 namespace NuGetConsolidator.Cli;
@@ -7,7 +9,8 @@ namespace NuGetConsolidator.Cli;
 public static class Program
 {
     private static readonly string _currentPath = Directory.GetCurrentDirectory();
-    public static async Task<int> Main(string[] args)
+
+    public static int Main(string[] args)
     {
         //var file = new FileInfo("C:\\Users\\phhaw\\git\\NuGetConsolidator\\NuGetConsolidator.Example");
         var verboseOption = new Option<bool>(
@@ -38,17 +41,21 @@ public static class Program
             dryRunOption
         };
 
-        rootCommand.SetHandler(async (verbose, path, interactive, dryRun) =>
+        rootCommand.SetHandler((verbose, path, interactive, dryRun) =>
         {
-            await ConsolidatePackages(verbose, path, interactive, dryRun);
-        }, verboseOption, pathOption, interactiveOption, dryRunOption);
+            if (verbose)
+            {
+                LogBase.Init(LogLevel.Debug);
+            }
 
-        return await rootCommand.InvokeAsync(args);
+                ConsolidatePackages(verbose, path, interactive, dryRun);
+        }, verboseOption, pathOption, interactiveOption, dryRunOption);
+        return rootCommand.Invoke(args);
     }
 
-    private static async Task ConsolidatePackages(bool verbose, string path, bool interactive, bool dryRun)
+    private static void ConsolidatePackages(bool verbose, string path, bool interactive, bool dryRun)
     {
-        var projects = await ProjectAnalyzer.GetRedundantPackages(path);
+        var projects = ProjectAnalyzer.GetRedundantPackages(path);
 
         foreach (var project in projects)
         {

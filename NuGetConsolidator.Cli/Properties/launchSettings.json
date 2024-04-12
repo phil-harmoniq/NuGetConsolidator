@@ -2,7 +2,7 @@
   "profiles": {
     "NuGetConsolidator.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "--path C:\\Users\\phhaw\\git\\NuGetConsolidator\\NuGetConsolidator.Example\\"
+      "commandLineArgs": "--verbose --path C:\\Users\\phhaw\\git\\NuGetConsolidator\\NuGetConsolidator.Example\\"
     }
   }
 }
