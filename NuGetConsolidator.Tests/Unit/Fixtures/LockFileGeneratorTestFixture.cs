@@ -1,5 +1,7 @@
-﻿using NuGet.ProjectModel;
+﻿using Microsoft.Extensions.Logging;
+using NuGet.ProjectModel;
 using NuGetConsolidator.Core.Targeting;
+using NuGetConsolidator.Core.Utilities;
 
 namespace NuGetConsolidator.Tests.Unit.Fixtures;
 

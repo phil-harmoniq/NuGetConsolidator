@@ -21,6 +21,8 @@ public class PackageReferenceAnalyzerTests : IClassFixture<PackageReferenceAnaly
             foreach (var dependencyGroup in lockFile.ProjectFileDependencyGroups)
             {
                 var packageReferenceAnalyzer = new PackageReferenceAnalyzer(dependencyGroup, lockFile);
+
+                var redundantPackages = packageReferenceAnalyzer.GetRedundantPackages();
             }
         }
     }

@@ -34,19 +34,15 @@ public class DotNetCommandRunner : IDisposable
             _dotNetProcess.Start();
             _dotNetProcess.WaitForExit();
 
-            if (!_dotNetProcess.HasExited)
+            var output = _dotNetProcess.StandardOutput.ReadToEnd();
+            var errors = _dotNetProcess.StandardError.ReadToEnd();
+
+            if (_dotNetProcess.ExitCode != 0)
             {
-                _dotNetProcess.Kill();
-                var output = _dotNetProcess.StandardOutput.ReadToEnd();
-                var errors = _dotNetProcess.StandardError.ReadToEnd();
-                return new CommandResult(output, errors, _dotNetProcess.ExitCode);
+                _logger.LogError(errors);
             }
-            else
-            {
-                var output = _dotNetProcess.StandardOutput.ReadToEnd();
-                var errors = _dotNetProcess.StandardError.ReadToEnd();
-                return new CommandResult(output.ToString(), errors.ToString(), _dotNetProcess.ExitCode);
-            }
+
+            return new CommandResult(output.ToString(), errors.ToString(), _dotNetProcess.ExitCode);
         }
         catch (Exception ex)
         {
@@ -60,8 +56,11 @@ public class DotNetCommandRunner : IDisposable
         var outputStringBuilder = new StringBuilder();
         var errorStringBuilder = new StringBuilder();
 
-        _dotNetProcess.OutputDataReceived += new DataReceivedEventHandler((sender, args) => OutputHandler(sender, args, outputStringBuilder));
-        _dotNetProcess.ErrorDataReceived += new DataReceivedEventHandler((sender, args) => ErrorHandler(sender, args, outputStringBuilder));
+        _dotNetProcess.OutputDataReceived += new DataReceivedEventHandler((sender, args)
+            => OutputHandler(sender, args, outputStringBuilder));
+
+        _dotNetProcess.ErrorDataReceived += new DataReceivedEventHandler((sender, args)
+            => ErrorHandler(sender, args, outputStringBuilder));
 
         try
         {
@@ -97,13 +96,11 @@ public class DotNetCommandRunner : IDisposable
 
     private static void OutputHandler(object sender, DataReceivedEventArgs outLine, StringBuilder stringBuilder)
     {
-        _logger.LogInformation(outLine.Data);
         stringBuilder.AppendLine(outLine.Data);
     }
 
     private static void ErrorHandler(object sender, DataReceivedEventArgs errorLine, StringBuilder stringBuilder)
     {
-        _logger.LogError(errorLine.Data);
         stringBuilder.AppendLine(errorLine.Data);
     }
 }

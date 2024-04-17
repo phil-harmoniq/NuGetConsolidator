@@ -7,7 +7,7 @@ public class PackageReferenceAnalyzerTestFixture : TestBase
 {
     public DependencyGraphSpec DependencyGraph { get; }
     public LockFileGenerator LockFileGenerator { get; }
-    public IList<LockFile> LockFiles { get; } = [];
+    public IList<LockFile> LockFiles { get; } = new List<LockFile>();
 
     public PackageReferenceAnalyzerTestFixture()
     {

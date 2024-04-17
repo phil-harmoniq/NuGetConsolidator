@@ -42,10 +42,14 @@ public static class Program
 
         rootCommand.SetHandler(async (verbose, path, interactive, dryRun) =>
         {
-            if (verbose)
-            {
-                LogBase.Init(LogLevel.Debug);
-            }
+            //if (verbose)
+            //{
+            //    LogBase.Init(LogLevel.Information);
+            //}
+            //else
+            //{
+            //    LogBase.Init(LogLevel.Information);
+            //}
 
             await ConsolidatePackages(verbose, path, interactive, dryRun);
         }, verboseOption, pathOption, interactiveOption, dryRunOption);

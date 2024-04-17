@@ -26,7 +26,7 @@ public class DependencyGraphGenerator : IDisposable
 
         using (var commandRunner = new DotNetCommandRunner(directoryName, arguments))
         {
-            var commandResult = await commandRunner.ExecuteAsync();
+            var commandResult = commandRunner.Execute();
 
             if (commandResult.IsSuccessful)
             {

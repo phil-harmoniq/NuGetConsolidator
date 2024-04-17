@@ -1,7 +1,6 @@
 ﻿using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
-//using Microsoft.CodeAnalysis.MSBuild;
 using NuGet.LibraryModel;
 using NuGet.Versioning;
 using NuGetConsolidator.Core.Extensions;

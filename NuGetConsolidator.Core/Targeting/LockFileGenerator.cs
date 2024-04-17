@@ -18,9 +18,17 @@ public class LockFileGenerator
         using (var commandRunner = new DotNetCommandRunner(directoryName, arguments))
         {
             var commandResult = await commandRunner.ExecuteAsync();
-            var outputLockFile = Path.Combine(outputPath, "project.assets.json");
-            var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NuGet.Common.NullLogger.Instance);
-            return lockFile;
+
+            if (commandResult.IsSuccessful)
+            {
+                var outputLockFile = Path.Combine(outputPath, "project.assets.json");
+                var lockFile = LockFileUtilities.GetLockFile(outputLockFile, NuGet.Common.NullLogger.Instance);
+                return lockFile;
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }
