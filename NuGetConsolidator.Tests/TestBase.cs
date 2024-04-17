@@ -16,7 +16,7 @@ public class TestBase
     {
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
         var solutionPath = Path.Combine(baseDir, "..", "..", "..", "..");
-        var examplePath = Path.Combine(solutionPath, "NuGetConsolidator.Example") + "\\";
+        var examplePath = Path.Combine(solutionPath, "NuGetConsolidator.Example") + Path.DirectorySeparatorChar;
 
         SolutionPath = solutionPath;
         ExamplePath = examplePath;

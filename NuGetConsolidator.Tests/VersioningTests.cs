@@ -32,7 +32,7 @@ public class VersioningTests
     {
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
         var solutionDir = Path.Combine(baseDir, "..", "..", "..", "..");
-        var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example") + Path.PathSeparator;
+        var exampleDir = Path.Combine(solutionDir, "NuGetConsolidator.Example") + Path.DirectorySeparatorChar;
         var projects = await ProjectAnalyzer.GetRedundantPackages(exampleDir);
 
         foreach (var project in projects)
